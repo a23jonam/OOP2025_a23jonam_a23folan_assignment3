@@ -34,16 +34,15 @@ class Worker {
     private double t; // Energy decrease interval in seconds
     private String location;
     private double lastEnergyDecrease;
-    private final int id;
-    private static int idCounter = 0;
+    private final String name; // Changed from id to name
     private Random random = new Random();
 
-    public Worker() {
+    public Worker(String name) {
         this.energyLevel = random.nextInt(61) + 30; // 30-90
         this.t = 0.5 + (random.nextDouble() * 1.0); // 0.5-1.5 seconds
         this.location = "office";
         this.lastEnergyDecrease = System.currentTimeMillis() / 1000.0;
-        this.id = idCounter++;
+        this.name = name;
     }
 
     public boolean updateEnergy(double currentTime) {
@@ -61,18 +60,18 @@ class Worker {
 
     public void goToCoffeeRoom(double currentTime) {
         location = "coffee_room";
-        System.out.println("Worker " + id + " went to coffee room at " + currentTime);
+        System.out.println(name + " went to coffee room at " + currentTime);
     }
 
     public void drinkCoffee(double currentTime) {
         energyLevel += random.nextInt(21) + 20; // 20-40 energy boost
         location = "office";
-        System.out.println("Worker " + id + " drank coffee and returned to office at " + currentTime);
+        System.out.println(name + " drank coffee and returned to office at " + currentTime);
     }
 
     public void goHome(double currentTime) {
         location = "home";
-        System.out.println("Worker " + id + " went home due to 0 energy at " + currentTime);
+        System.out.println(name + " went home due to 0 energy at " + currentTime);
     }
 
     public String getLocation() {
@@ -82,6 +81,10 @@ class Worker {
     public int getEnergyLevel() {
         return energyLevel;
     }
+
+    public String getName() {
+        return name;
+    }
 }
 
 class CoffeeSimulation {
@@ -90,17 +93,19 @@ class CoffeeSimulation {
     private double simulationTime;
     private Random random = new Random();
 
-    public CoffeeSimulation(int numWorkers, double duration) {
+    public CoffeeSimulation(double duration) {
         this.workers = new ConcurrentLinkedQueue<>();
         this.coffeeMachine = new CoffeeMachine();
         this.simulationTime = duration;
-        initialize(numWorkers);
+        initialize();
     }
 
-    private void initialize(int numWorkers) {
-        for (int i = 0; i < numWorkers; i++) {
-            workers.add(new Worker());
-        }
+    private void initialize() {
+        // Add exactly 4 named workers
+        workers.add(new Worker("Adrian"));
+        workers.add(new Worker("Simon"));
+        workers.add(new Worker("Erik"));
+        workers.add(new Worker("Nora"));
     }
 
     public void run() {
@@ -144,10 +149,8 @@ class CoffeeSimulation {
     }
 
     public static void main(String[] args) {
-        // Example usage
-        int numWorkers = 5;    // Could be user input
-        double duration = 30.0; // Could be user input
-        CoffeeSimulation sim = new CoffeeSimulation(numWorkers, duration);
+        double duration = 30.0; // Simulation runs for 30 seconds
+        CoffeeSimulation sim = new CoffeeSimulation(duration);
         sim.run();
     }
 }
