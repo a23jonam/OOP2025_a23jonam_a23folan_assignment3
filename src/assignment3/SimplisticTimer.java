@@ -1,9 +1,9 @@
-package assignment3;
+//package assignment3;
 /**
  * A simplistic class to create timestamps at a millisecond granularity to
  * support debugging.
  */
-public class SimplisticTimer {
+ public class SimplisticTimer {
     private final long startTime;
     private long previousLapTime;
 
@@ -46,4 +46,4 @@ public class SimplisticTimer {
     public void resetLapTime() {
         this.previousLapTime = this.startTime;
     }
-}
+} 
