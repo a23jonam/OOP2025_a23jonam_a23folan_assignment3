@@ -1,35 +1,9 @@
 package assignment3;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Random;
 
-class CoffeeMachine {
-    private int reserve;
-    private Random random = new Random();
-
-    public CoffeeMachine() {
-        this.reserve = 0;
-    }
-
-    public synchronized void replenish(int amount) {
-        reserve += amount;
-        System.out.println("Coffee machine replenished with " + amount + " cups at " + System.currentTimeMillis()/1000.0);
-    }
-
-    public boolean hasCoffee() {
-        return reserve > 0;
-    }
-
-    public synchronized boolean dispenseCoffee() {
-        if (reserve > 0) {
-            reserve--;
-            return true;
-        }
-        return false;
-    }
-}
-
-class Worker implements Runnable {
+import java.util.concurrent.ConcurrentLinkedQueue;
+public class Worker implements Runnable {
     private int energyLevel;
     private double t; // Energy decrease interval in seconds
     private String location;
@@ -111,71 +85,5 @@ class Worker implements Runnable {
 
     public void stop() {
         running = false;
-    }
-}
-
-class CoffeeSimulation {
-    private ConcurrentLinkedQueue<Thread> workerThreads;
-    private CoffeeMachine coffeeMachine;
-    private double simulationTime;
-    private Random random = new Random();
-
-    public CoffeeSimulation(double duration) {
-        this.workerThreads = new ConcurrentLinkedQueue<>();
-        this.coffeeMachine = new CoffeeMachine();
-        this.simulationTime = duration;
-        initialize();
-    }
-
-    private void initialize() {
-        String[] names = {"Adrian", "Simon", "Erik", "Nora"};
-        for (String name : names) {
-            Worker worker = new Worker(name, coffeeMachine);
-            Thread thread = new Thread(worker);
-            workerThreads.add(thread);
-        }
-    }
-
-    public void run() {
-        long startTime = System.currentTimeMillis();
-        
-        // Start all worker threads
-        for (Thread thread : workerThreads) {
-            thread.start();
-        }
-
-        // Run simulation for specified duration
-        while (System.currentTimeMillis() / 1000.0 - startTime < simulationTime) {
-            if (random.nextDouble() < 0.1) {
-                coffeeMachine.replenish(random.nextInt(11) + 5);
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        // Stop all workers
-        for (Thread thread : workerThreads) {
-        	thread.interrupt();
-        }
-
-        // Wait for all threads to complete
-        for (Thread thread : workerThreads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        System.out.println("Simulation completed at " + (System.currentTimeMillis() / 1000.0));
-    }
-
-    public static void main(String[] args) {
-        double duration = 30.0;
-        CoffeeSimulation sim = new CoffeeSimulation(duration);
-        sim.run();
     }
 }
