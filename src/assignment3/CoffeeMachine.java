@@ -13,7 +13,7 @@ class CoffeeMachine {
 
     public synchronized void replenish(int amount) {
         reserve += amount;
-        System.out.println("Coffee machine replenished with " + amount + " cups at " + System.currentTimeMillis()/1000.0);
+        System.out.println("Coffee machine replenished with " + amount + " cups at " + System.currentTimeMillis());
     }
 
     public boolean hasCoffee() {

@@ -25,7 +25,7 @@ public class Worker implements Runnable {
     @Override
     public void run() {
         while (running && energyLevel > 0) {
-            double currentTime = System.currentTimeMillis() / 1000.0;
+            double currentTime = System.currentTimeMillis();
             
             if (updateEnergy(currentTime)) {
                 if (energyLevel <= 0 && location.equals("coffee_room")) {
@@ -62,6 +62,9 @@ public class Worker implements Runnable {
         }
         return false;
     }
+    private void timeSwap(double currentTime) {
+    	double TimeSwap = currentTime * 1000;
+    }
 
     private boolean needsCoffee() {
         return location.equals("office") && random.nextDouble() < 0.3;
@@ -69,13 +72,13 @@ public class Worker implements Runnable {
 
     private void goToCoffeeRoom(double currentTime) {
         location = "coffee_room";
-        System.out.println(name + " went to coffee room at " + currentTime);
+        System.out.println(name + " went to coffee room at " + (currentTime / 1000));
     }
 
     private void drinkCoffee(double currentTime) {
         energyLevel += random.nextInt(21) + 20;
         location = "office";
-        System.out.println(name + " drank coffee and returned to office at " + currentTime);
+        System.out.println(name + " drank coffee and returned to office at " + (currentTime / 1000));
     }
 
     private void goHome(double currentTime) {

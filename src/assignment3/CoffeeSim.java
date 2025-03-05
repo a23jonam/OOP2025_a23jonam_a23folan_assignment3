@@ -34,7 +34,7 @@ public class CoffeeSim {
         }
 
         // Run simulation for specified duration
-        while (System.currentTimeMillis() / 1000.0 - startTime < simulationTime) {
+        while (System.currentTimeMillis() - startTime < simulationTime) {
             if (random.nextLong() < 0.1) {
                 coffeeMachine.replenish(random.nextInt(11) + 5);
             }
@@ -59,6 +59,6 @@ public class CoffeeSim {
             }
         }
 
-        System.out.println("Simulation completed at " + (System.currentTimeMillis() / 1000.0));
+        System.out.println("Simulation completed at " + System.currentTimeMillis());
     }
 }
