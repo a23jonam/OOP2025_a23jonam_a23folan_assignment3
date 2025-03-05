@@ -1,13 +1,11 @@
 package assignment3;
 
 import java.util.Random;
-
-import java.util.concurrent.ConcurrentLinkedQueue;
 public class Worker implements Runnable {
     private int energyLevel;
-    private double t; // Energy decrease interval in seconds
+    private int t; // Energy decrease interval in seconds
     private String location;
-    private double lastEnergyDecrease;
+    private long lastEnergyDecrease;
     private final String name;
     private Random random = new Random();
     private final CoffeeMachine coffeeMachine;
@@ -15,9 +13,9 @@ public class Worker implements Runnable {
 
     public Worker(String name, CoffeeMachine coffeeMachine) {
         this.energyLevel = random.nextInt(61) + 30;
-        this.t = 0.5 + (random.nextDouble() * 1.0);
+        this.t = 500 + (random.nextInt(1000) +1);
         this.location = "office";
-        this.lastEnergyDecrease = System.currentTimeMillis() / 1000.0;
+        this.lastEnergyDecrease = System.currentTimeMillis();
         this.name = name;
         this.coffeeMachine = coffeeMachine;
     }
@@ -57,14 +55,14 @@ public class Worker implements Runnable {
     private boolean updateEnergy(double currentTime) {
         if ((currentTime - lastEnergyDecrease) >= t) {
             energyLevel--;
-            lastEnergyDecrease = currentTime;
+            lastEnergyDecrease = (long)currentTime;
             return true;
         }
         return false;
     }
-    private void timeSwap(double currentTime) {
-    	double TimeSwap = currentTime * 1000;
-    }
+   // private void timeSwap(long currentTime) {
+   // 	double TimeSwap = currentTime * 1000;
+    //}
 
     private boolean needsCoffee() {
         return location.equals("office") && random.nextDouble() < 0.3;
@@ -72,13 +70,13 @@ public class Worker implements Runnable {
 
     private void goToCoffeeRoom(double currentTime) {
         location = "coffee_room";
-        System.out.println(name + " went to coffee room at " + (currentTime / 1000));
+        System.out.println(name + " went to coffee room at " + (currentTime));
     }
 
     private void drinkCoffee(double currentTime) {
         energyLevel += random.nextInt(21) + 20;
         location = "office";
-        System.out.println(name + " drank coffee and returned to office at " + (currentTime / 1000));
+        System.out.println(name + " drank coffee and returned to office at " + (currentTime));
     }
 
     private void goHome(double currentTime) {

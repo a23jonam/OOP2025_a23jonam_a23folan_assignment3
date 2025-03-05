@@ -1,4 +1,4 @@
-//package assignment3;
+package assignment3;
 /**
  * A simplistic class to create timestamps at a millisecond granularity to
  * support debugging.

@@ -6,17 +6,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class CoffeeSim {
     private ConcurrentLinkedQueue<Thread> workerThreads;
     private CoffeeMachine coffeeMachine;
-    private long simulationTime;
+    private double simulationTime;
     private Random random = new Random();
 
-    public CoffeeSim(long duration) {
+    public CoffeeSim(double duration) {
         this.workerThreads = new ConcurrentLinkedQueue<>();
         this.coffeeMachine = new CoffeeMachine();
         this.simulationTime = duration;
         initialize();
     }
 
-    private void initialize() {
+    void initialize() {
         String[] names = {"Adrian", "Simon", "Erik", "Nora"};
         for (String name : names) {
             Worker worker = new Worker(name, coffeeMachine);
@@ -26,7 +26,7 @@ public class CoffeeSim {
     }
 
     public void run() {
-        long startTime = System.currentTimeMillis();
+        double startTime = System.currentTimeMillis();
         
         // Start all worker threads
         for (Thread thread : workerThreads) {
@@ -36,7 +36,7 @@ public class CoffeeSim {
         // Run simulation for specified duration
         while (System.currentTimeMillis() - startTime < simulationTime) {
             if (random.nextLong() < 0.1) {
-                coffeeMachine.replenish(random.nextInt(11) + 5);
+                coffeeMachine.coffeeReserve(random.nextInt(11) + 5);
             }
             try {
                 Thread.sleep(100);
